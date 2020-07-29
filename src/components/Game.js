@@ -9,29 +9,16 @@ import Item from "./Item";
 
 
 
-const calculateCookiesPerSecond = (purchasedItems) => {
-  return Object.keys(purchasedItems).reduce((acc, itemId) => {
-    const numOwned = purchasedItems[itemId];
-    const item = items.find((item) => item.id === itemId);
-    const value = item.value;
-
-    return acc + value * numOwned;
-  }, 0);
-};
-
 const Game = () => {
-  const contextData = React.useContext(GameContext);
-  const {numCookies, setNumCookies, purchasedItems, setPurchasedItems} = contextData;
+  const {numCookies, setNumCookies, purchasedItems, setPurchasedItems, cookiesSecond} = React.useContext(GameContext);
   
 
   const incrementCookies = () => {
     setNumCookies((c) => c + 1);
   };
 
-  useInterval(() => {
-    const numOfGeneratedCookies = calculateCookiesPerSecond(purchasedItems);
-
-    setNumCookies(numCookies + numOfGeneratedCookies);
+  useInterval(() => {    
+    setNumCookies(numCookies + cookiesSecond);
   }, 1000);
 
   React.useEffect(() => {
@@ -61,7 +48,7 @@ const Game = () => {
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          <strong>{calculateCookiesPerSecond(purchasedItems)}</strong> cookies
+          <strong>{cookiesSecond}</strong> cookies
           per second
         </Indicator>
         <Button onClick={incrementCookies}>
@@ -79,19 +66,7 @@ const Game = () => {
               name={item.name}
               cost={item.cost}
               value={item.value}
-              numOwned={purchasedItems[item.id]}
-              handleAttemptedPurchase={() => {
-                if (numCookies < item.cost) {
-                  alert("Cannot afford item");
-                  return;
-                }
-
-                setNumCookies(numCookies - item.cost);
-                setPurchasedItems({
-                  ...purchasedItems,
-                  [item.id]: purchasedItems[item.id] + 1,
-                });
-              }}
+              id={item.id}
             />
           );
         })}

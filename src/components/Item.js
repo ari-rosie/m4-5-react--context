@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import { GameContext } from "./GameContext";
 
 const Item = ({
   index,
   name,
   cost,
   value,
-  numOwned,
-  handleAttemptedPurchase,
+  id,
 }) => {
+  const {numCookies, setNumCookies, purchasedItems, setPurchasedItems} = React.useContext(GameContext);
   const ref = React.useRef(null);
 
   React.useEffect(() => {
@@ -18,14 +19,24 @@ const Item = ({
   }, [index]);
 
   return (
-    <Wrapper ref={ref} onClick={handleAttemptedPurchase}>
+    <Wrapper ref={ref} onClick={() => {
+      if (numCookies < cost) {
+        alert("Cannot afford item");
+        return;
+      }
+      setNumCookies(numCookies - cost);
+      setPurchasedItems({
+        ...purchasedItems,
+        [id]: purchasedItems[id] + 1,
+      });
+    }}>
       <Left>
         <Name>{name}</Name>
         <Info>
           Cost: {cost} cookie(s). Produces {value} cookies/second.
         </Info>
       </Left>
-      <Right>{numOwned}</Right>
+      <Right>{purchasedItems[id]}</Right>
     </Wrapper>
   );
 };
