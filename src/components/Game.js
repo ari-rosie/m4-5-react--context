@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { GameContext } from './GameContext';
@@ -7,11 +7,26 @@ import items from '../data.js';
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
 
+const registerTime = () => {
+  localStorage.setItem('time', Date.parse(new Date()));
+};
+
 
 
 const Game = () => {
   const {numCookies, setNumCookies, cookiesSecond} = React.useContext(GameContext);
   
+  useEffect(() => {
+    const elapsedTime = Date.parse(new Date()) - localStorage.getItem('time');
+    setNumCookies(c => c + cookiesSecond * (elapsedTime/1000));
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', registerTime);
+    return () => window.removeEventListener('beforeunload', registerTime);
+  });
+
 
   const incrementCookies = () => {
     setNumCookies((c) => c + 1);
