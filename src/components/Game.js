@@ -10,7 +10,7 @@ import Item from "./Item";
 
 
 const Game = () => {
-  const {numCookies, setNumCookies, purchasedItems, setPurchasedItems, cookiesSecond} = React.useContext(GameContext);
+  const {numCookies, setNumCookies, cookiesSecond} = React.useContext(GameContext);
   
 
   const incrementCookies = () => {
