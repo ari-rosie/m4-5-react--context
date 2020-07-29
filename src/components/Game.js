@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { NumCookiesContext } from './App';
+import { GameContext } from './GameContext';
 import useInterval from "../hooks/use-interval.hook";
 import items from '../data.js';
 import cookieSrc from "../cookie.svg";
@@ -20,7 +20,7 @@ const calculateCookiesPerSecond = (purchasedItems) => {
 };
 
 const Game = () => {
-  const contextData = React.useContext(NumCookiesContext);
+  const contextData = React.useContext(GameContext);
   const {numCookies, setNumCookies, purchasedItems, setPurchasedItems} = contextData;
   
 
